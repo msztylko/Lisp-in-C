@@ -1,4 +1,4 @@
 all:
-	gcc -std=c99 -Wall parsing.c mpc.c -ledit -lm -o parsing.o
+	gcc -std=c99 -Wall lispy.c mpc.c -ledit -lm -o lispy.o
 clean:
-	rm -f parsing.o
+	rm -f lispy.o
