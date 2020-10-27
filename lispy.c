@@ -27,9 +27,32 @@ void add_history(char *unused) {}
 #include <editline/history.h>
 #endif
 
-/* Create enumaration of possible lval  types */
-enum { LVAL_NUM, LVAL_ERR, LVAL_SYM, LVAL_SEXPR, LVAL_QEXPR };
+/* Forward Declarations */
 
+struct lval;
+struct lenv;
+typedef struct lval lval;
+typedef struct lenv lenv;
+
+/* Lisp Value */
+
+enum { LVAL_NUM, LVAL_ERR, LVAL_SYM,
+       LVAL_FUN, LVAL_SEXPR, LVAL_QEXPR };
+ 
+typedef lval*(*builtint)(lenv*, lval*);
+
+struct lval {
+    int type;
+    
+    long num;
+    char *err;
+    char *sym;
+    lbuiltin fun;
+
+    int count;
+    lval **cell;
+}
+ 
 /* Declare new lval struct */
 typedef struct lval {
     int type;
@@ -375,8 +398,7 @@ int main(int argc, char *argv[]) {
     mpca_lang(MPCA_LANG_DEFAULT,
     "                                                          \
         number : /-?[0-9]+/ ;                                  \
-        symbol : \"list\" | \"head\" | \"tail\"                \
-               | \"join\" | \"eval\" | '+' | '-' | '*' | '/' ; \
+        symbol : /[a-zA-Z0-9_+\\-*\\/\\\\=<>!&]+/ ;            \
         sexpr  : '(' <expr>* ')' ;                             \
         qexpr  : '{' <expr>* '}' ;                             \
         expr   : <number> | <symbol> | <sexpr> | <qexpr> ;     \
